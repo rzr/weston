@@ -7,7 +7,7 @@
 %endif
 
 Name:           weston
-Version:        1.3.1
+Version:        1.4.0
 Release:        0
 Summary:        Wayland Compositor Infrastructure
 License:        MIT
