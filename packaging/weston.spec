@@ -87,7 +87,18 @@ on other system components.
 cp %{SOURCE1001} .
 
 %build
-%autogen --disable-static --disable-setuid-install  --enable-simple-clients --enable-clients --disable-libunwind --disable-xwayland --disable-xwayland-test --disable-x11-compositor --disable-rpi-compositor %{?extra_config_options:%extra_config_options}
+
+%autogen \
+    --disable-static --disable-setuid-install  \
+    --enable-simple-clients \
+    --enable-clients \
+    --disable-libunwind \
+    --disable-xwayland --disable-xwayland-test --disable-x11-compositor \
+    --disable-rpi-compositor \
+    %{?extra_config_options:%extra_config_options} \
+    --enable-taskbar \
+    #eol
+
 make %{?_smp_mflags}
 
 %install
