@@ -2629,6 +2629,10 @@ pointer_handle_enter(void *data, struct wl_pointer *pointer,
 	input->pointer_focus = wl_surface_get_user_data(surface);
 	window = input->pointer_focus;
 
+	if (!window) {
+		return;
+	}
+
 	if (window->resizing) {
 		window->resizing = 0;
 		/* Schedule a redraw to free the pool */
@@ -2862,7 +2866,7 @@ keyboard_handle_enter(void *data, struct wl_keyboard *keyboard,
 	input->keyboard_focus = wl_surface_get_user_data(surface);
 
 	window = input->keyboard_focus;
-	if (window->keyboard_focus_handler)
+	if (window && window->keyboard_focus_handler)
 		(*window->keyboard_focus_handler)(window,
 						  input, window->user_data);
 }
@@ -5413,6 +5417,12 @@ display_has_subcompositor(struct display *display)
 	wl_display_roundtrip(display->display);
 
 	return display->subcompositor != NULL;
+}
+
+struct wl_subcompositor *
+display_get_subcompositor(struct display *display)
+{
+	return display->subcompositor;
 }
 
 cairo_device_t *

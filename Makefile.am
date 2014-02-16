@@ -52,6 +52,8 @@ weston_SOURCES =					\
 	src/data-device.c				\
 	src/filter.c					\
 	src/filter.h					\
+	src/embed.c				\
+	src/embed.h				\
 	src/screenshooter.c				\
 	src/clipboard.c					\
 	src/zoom.c					\
@@ -78,7 +80,9 @@ nodist_weston_SOURCES =					\
 	protocol/workspaces-protocol.c			\
 	protocol/workspaces-server-protocol.h		\
 	protocol/scaler-protocol.c			\
-	protocol/scaler-server-protocol.h
+	protocol/scaler-server-protocol.h		\
+	protocol/embed-protocol.c			\
+	protocol/embed-server-protocol.h
 
 BUILT_SOURCES += $(nodist_weston_SOURCES)
 
@@ -516,6 +520,20 @@ weston_subsurfaces_CFLAGS =			\
 weston_subsurfaces_LDADD = libtoytoolkit.la $(SIMPLE_EGL_CLIENT_LIBS) -lm
 endif
 
+demo_clients += weston-embed-hole weston-embed-plug
+weston_embed_hole_SOURCES = clients/embed-hole.c
+nodist_weston_embed_hole_SOURCES =		\
+	protocol/embed-protocol.c		\
+	protocol/embed-client-protocol.h
+weston_embed_hole_LDADD = libtoytoolkit.la
+weston_embed_hole_CFLAGS = $(AM_CFLAGS) $(CLIENT_CFLAGS)
+weston_embed_plug_SOURCES = clients/embed-plug.c
+nodist_weston_embed_plug_SOURCES =		\
+	protocol/embed-protocol.c		\
+	protocol/embed-client-protocol.h
+weston_embed_plug_LDADD = libtoytoolkit.la
+weston_embed_plug_CFLAGS = $(AM_CFLAGS) $(CLIENT_CFLAGS)
+
 if HAVE_PANGO
 demo_clients += weston-editor
 weston_editor_SOURCES = clients/editor.c
@@ -597,7 +615,9 @@ BUILT_SOURCES +=					\
 	protocol/workspaces-client-protocol.h		\
 	protocol/workspaces-protocol.c			\
 	protocol/xdg-shell-protocol.c			\
-	protocol/xdg-shell-client-protocol.h
+	protocol/xdg-shell-client-protocol.h		\
+	protocol/embed-protocol.c			\
+	protocol/embed-client-protocol.h
 
 
 westondatadir = $(datadir)/weston
@@ -910,6 +930,7 @@ EXTRA_DIST +=					\
 	protocol/workspaces.xml			\
 	protocol/text-cursor-position.xml	\
 	protocol/wayland-test.xml		\
+	protocol/embed.xml			\
 	protocol/xdg-shell.xml			\
 	protocol/scaler.xml
 
