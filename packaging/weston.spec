@@ -30,6 +30,7 @@ BuildRequires:  xz
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(cairo-egl) >= 1.11.3
 BuildRequires:  pkgconfig(egl) >= 7.10
+BuildRequires:  pkgconfig(freerdp)
 BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(glesv2)
@@ -88,7 +89,7 @@ on other system components.
 cp %{SOURCE1001} .
 
 %build
-%autogen --disable-static --disable-setuid-install  --enable-simple-clients --enable-clients --disable-libunwind --disable-xwayland --disable-xwayland-test --disable-x11-compositor --disable-rpi-compositor %{?extra_config_options:%extra_config_options}
+%autogen --disable-static --disable-setuid-install  --enable-simple-clients --enable-clients --disable-libunwind --disable-xwayland --disable-xwayland-test --disable-x11-compositor --disable-rpi-compositor --enable-rdp-compositor %{?extra_config_options:%extra_config_options}
 make %{?_smp_mflags}
 
 %install
