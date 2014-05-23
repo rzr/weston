@@ -7,9 +7,7 @@
 %define extra_config_options1 --disable-drm-compositor
 %endif
 
-%if %{with rdp}
 %define extra_config_options2 --enable-rdp-compositor
-%endif
 
 Name:           weston
 Version:        1.4.0
@@ -38,9 +36,7 @@ BuildRequires:  xz
 BuildRequires:  pkgconfig(cairo)
 BuildRequires:  pkgconfig(cairo-egl) >= 1.11.3
 BuildRequires:  pkgconfig(egl) >= 7.10
-%if %{with rdp}
 BuildRequires:  pkgconfig(freerdp)
-%endif
 BuildRequires:  pkgconfig(gbm)
 BuildRequires:  pkgconfig(gio-2.0)
 BuildRequires:  pkgconfig(glesv2)
@@ -94,14 +90,12 @@ This package provides a set of example wayland clients useful for
 validating the functionality of wayland with very little dependencies
 on other system components.
 
-%if %{with rdp}
 %package rdp
 Summary: RDP compositor for %{name}
 Group:   Graphics & UI Framework/Development
 %description rdp
 This package provides a RDP compositor allowing to do remote rendering
 through the network.
-%endif
 
 %prep
 %setup -q
@@ -198,10 +192,8 @@ getent group weston-launch >/dev/null || %{_sbindir}/groupadd -o -r weston-launc
 %_bindir/weston-fullscreen
 %_bindir/weston-calibrator
 
-%if %{with rdp}
 %files rdp
 %manifest %{name}.manifest
 %_libdir/weston/rdp-backend.so
-%endif
 
 %changelog
