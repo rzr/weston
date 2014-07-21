@@ -1,3 +1,9 @@
+weston (0.0.0-0) UNRELEASED; urgency=medium
+
+  * WIP
+
+ -- Philippe Coval <pcoval@pcl>  Mon, 21 Jul 2014 11:43:32 +0200
+
 weston (1.5.0-2ubuntu1) utopic; urgency=low
 
   * Merge with Debian unstable, remaining chage: 
