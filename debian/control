@@ -1,0 +1,65 @@
+Source: weston
+Section: x11
+Priority: optional
+Maintainer: Ubuntu X-SWAT <ubuntu-x@lists.ubuntu.com>
+XSBC-Original-Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
+Uploaders:
+ Cyril Brulebois <kibi@debian.org>,
+ Mike Gabriel <sunweaver@debian.org>,
+ Héctor Orón Martínez <zumbi@debian.org>,
+ Emilio Pozuelo Monfort <pochu@debian.org>,
+Build-Depends:
+ debhelper (>= 9),
+ quilt,
+ dh-autoreconf,
+ pkg-config,
+ libpixman-1-dev,
+ libpng-dev,
+ libjpeg-dev,
+ libcolord-dev (>= 0.1.27),
+ mesa-common-dev,
+ libglu1-mesa-dev,
+ libegl1-mesa-dev (>= 9.0~),
+ libegl1-mesa-drivers (>= 9.0~),
+ libgles2-mesa-dev (>= 9.0~),
+ libwayland-dev (>= 1.2.0),
+ libxcb1-dev,
+ libxcb-composite0-dev,
+ libxcb-xfixes0-dev,
+ libxcb-xkb-dev,
+ libx11-xcb-dev,
+ libx11-dev,
+ libudev-dev,
+ libgbm-dev,
+ libxkbcommon-dev (>= 0.1.0~2),
+ libcairo2-dev,
+ libpango1.0-dev,
+ libgdk-pixbuf2.0-dev,
+ libxcursor-dev,
+ libmtdev-dev,
+ libpam0g-dev,
+ libvpx-dev,
+ libsystemd-login-dev,
+ libinput-dev,
+Standards-Version: 3.9.5
+Homepage: http://wayland.freedesktop.org/
+Vcs-Git: git://anonscm.debian.org/pkg-xorg/wayland/weston
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-xorg/wayland/weston.git
+
+Package: weston
+Architecture: linux-any
+Depends:
+ adduser,
+ libegl1-mesa (>= 8.0-2),
+ libegl1-mesa-drivers (>= 8.0-2),
+ libgles2-mesa (>= 8.0-2),
+ ${shlibs:Depends},
+ ${misc:Depends},
+Recommends:
+ libgl1-mesa-dri,
+Description: reference implementation of a wayland compositor
+ Part of the Wayland project is also the Weston reference implementation
+ of a Wayland compositor. Weston can run as an X client or under Linux
+ KMS and ships with a few demo clients. The Weston compositor is a minimal
+ and fast compositor and is suitable for many embedded and mobile use
+ cases. 

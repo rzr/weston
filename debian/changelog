@@ -1,0 +1,173 @@
+weston (1.5.0-2ubuntu1) utopic; urgency=low
+
+  * Merge with Debian unstable, remaining chage: 
+    + rules, weston.install: Build using --with-cairo=image, since our cairo
+      disabled the gl backend. Don't try to install the screensaver or gears.
+
+ -- Iain Lane <iain@orangesquash.org.uk>  Tue, 10 Jun 2014 11:54:49 +0100
+
+weston (1.5.0-2) unstable; urgency=medium
+
+  * debian/control,
+    debian/rules:
+    + Enable libinput backend.
+
+ -- Emilio Pozuelo Monfort <pochu@debian.org>  Sun, 01 Jun 2014 17:25:06 +0200
+
+weston (1.5.0-1) unstable; urgency=medium
+
+  * Add myself to Uploaders.
+  * New upstream release.
+  * Switch back to source format 1.0 for now.
+  * debian/control:
+    + Drop librsvg2-bin build dependency, no longer needed.
+  * debian/clean:
+    + Dropped, no longer needed.
+  * debian/weston.install:
+    + Fix path for demo clients.
+    + Install the fullscreen shell.
+  * debian/patches/0001-animation-fix-move-scale-animation.patch:
+    + Patch from Jonny Lamb, taken from wayland-devel@, that fixes
+      move animations, as triggered e.g. by exposay.
+  * d/p/0001-exposay-fix-crash-when-navigating-with-the-keyboard.patch:
+    + New patch, fix a crash in exposay.
+
+ -- Emilio Pozuelo Monfort <pochu@debian.org>  Sat, 24 May 2014 02:53:44 +0200
+
+weston (1.4.0-1) unstable; urgency=medium
+
+  * New upstream release 1.4.0:
+    - Window buttons for xwayland windows and proper decorations for the
+      nested compositor (wayland backend)
+    - Make the gl-renderer a loadable module and make it possible to
+      switch from pixman to gl renderer at runtime.  This lets the
+      compositor start up faster, since we can load the gl-renderer and
+      initialize EGL+GLES2 later in the startup
+    - Support framebuffer formats other than XRGB8888 (gbm-format config
+      value under [core] section).
+    - Use logind for privileged access.  logind can now do the this that
+      weston-launch used to do: drm drop/set master and opening input
+      devices.  With this, weston can run on KMS without the
+      weston-launch setuid helper.
+    - struct weston_surface split into struct weston_surface and struct
+      weston_view.  This is a weston-internal feature, that makes it
+      possible to display a surface in multiple places in the compositor.
+    - Better output unplug handling.  We used to crash and in general not
+      handle output (monitor) unplug at all.  We now clean up properly
+      and move windows back into the visible region when their output is
+      unplugged.
+    - Keyboard focus animation and exposay (exposé-like window picker)
+    - More touch screen support, including touch-to-move and
+      touch-to-activate for surfaces, touch screen drag-and-drop
+    - Started work on xdg-shell protocol.  The xdg-shell is a more format
+      attempt at developing a protocol for the interaction between
+      applications and a desktop environmet.  The wl_shell protocol
+      currently in wayland was always only a place-holder to help
+      boot-strap toolkit support.  Now that GNOME Shell is moving to
+      Wayland, we have a full-featured desktop to drive the work and we
+      can start the effort in earnest
+    - Nested compositor buffer pass-through.  We specified a new EGL
+      extension to allow a nested compositor to pass buffers through to
+      the underlying compositor.  This lets the nested compositor skip
+      rendering and instead present the contents using a subsurface or
+      such in the underlying compositor
+    - Crop and scale protocol.  This protocol, which we're initially
+      staging in weston, lets a client specify that a only sub-rectangle
+      of it's surface should be presented, and potentially scaled up.
+    - weston-terminal gained scrollback history, use Ctrl+Shift UP/DOWN
+      to scroll.  Added a context menu for easy access to copy/paste/new
+      terminal (which have always been available as Ctrl-Shift-C/V/N)
+  * d/control: update
+    + bump standards version
+    + build depend on librsvg2-bin for PNG file generation.
+    + add build dependency against libxcb-composite0-dev for build
+    + add build-dependency against libxcb-xkb-dev (Closes: #733229)
+    + add build-dependency against libpango1.0-dev for the editor
+  * d/weston.install: update
+    + drop weston-tablet-shell
+    + add gl-renderer
+    + add clients
+
+ -- Hector Oron <zumbi@debian.org>  Thu, 30 Jan 2014 23:06:00 +0100
+
+weston (1.3.0-1ubuntu1) trusty; urgency=low
+
+  * rules, weston.install: Build using --with-cairo=image, since our cairo
+    disabled the gl backend. Don't try to install the screensaver.
+
+ -- Timo Aaltonen <tjaalton@ubuntu.com>  Thu, 07 Nov 2013 18:10:33 +0200
+
+weston (1.3.0-1) unstable; urgency=low
+
+  [ Sven Joachim ]
+  * Bump libwayland-dev build-depends to (>= 1.2.0).
+
+  [ Laurent Bigonville ]
+  * debian/rules:
+    - Install weston-launch with setuid bit set (LP: #1102597)
+    - Set libexec path to /usr/lib/weston
+  * debian/weston.lintian-overrides: Add override for the mode of weston-launch
+    executable
+  * debian/weston.examples: Install weston.ini as an example file
+  * debian/weston.postinst: Create weston-launch group on installation
+    (LP: #1203017)
+  * debian/control, debian/weston.install: Enable colord support
+  * debian/README.Debian: Fix directions on how to run weston under KMS
+    (Closes: #714379)
+  * debian/control: Add a dependency against adduser
+  * debian/control: Use canonical URL's for Vcs field
+
+  [ Timo Aaltonen ]
+  * rules: Explicitly enable cairo-gl so that weston-screensaver gets
+    built.
+
+  [ Hector Oron ]
+  * New upstream release (1.3.0) (Closes: #719144).
+  * Add myself to Uploaders.
+  * Switch Debian source format to 3.0 quilt
+
+ -- Hector Oron <zumbi@debian.org>  Fri, 11 Oct 2013 13:03:04 +0200
+
+weston (1.1.1-1) experimental; urgency=low
+
+  [ Timo Aaltonen ]
+  * New upstream release (Closes: #675138, #699045).
+  * Add a watch file.
+  * control: Add missing build-depends: libmtdev-dev, libxcursor-dev,
+    libpam0g-dev, libvpx-dev.
+  * Use source format 1.0.
+  * control: Bump the build-depends on libxkbcommon-dev to (>= 0.1.0~2).
+  * rules: Make the test run failure non-fatal, since it doesn't work
+    properly in headless-mode.
+  * weston.install: Add new files.
+  * control: Bump build-depends on mesa derived components to 9.0~.
+  * control, compat: Switch to debhelper 9.
+  * control: Bump policy to 3.9.4, no changes.
+  * control: Added homepage (Closes: #687571).
+  * Add README.source.
+  * patches/series: Add a placeholder file.
+
+  [ Sven Joachim ]
+  * Configure with --disable-libunwind until libunwind starts shipping
+    pkg-config files (see #711854).
+  * Add build-dependencies on libsystemd-login-dev and libglu1-mesa-dev.
+
+  [ Mike Gabriel ]
+  * control: add libgl1-mesa-dri to Recommends: field. (Closes: #714351).
+  * control: add myself to Uploaders: field.
+
+ -- Mike Gabriel <sunweaver@debian.org>  Fri, 28 Jun 2013 14:31:18 +0200
+
+weston (0.85.0-1) experimental; urgency=low
+
+  * Initial release (Closes: #630809).
+  * Build without setuid for weston; it's very young and experimental, so
+    let's be cautious.
+  * Document weston's setuid bit (or lack thereof) in README.Debian.
+  * Tiny/toy clients will be shipped in a later upload.
+  * Restrict to linux-any since wayland isn't as portable as X.
+  * Make sure the following packages are at least at 8.0-2 in the
+    generated dependencies: libegl1-mesa, libegl1-mesa-drivers, and
+    libgles2-mesa.
+
+ -- Cyril Brulebois <kibi@debian.org>  Tue, 21 Feb 2012 23:58:19 +0100

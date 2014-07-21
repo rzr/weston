@@ -1,0 +1,107 @@
+X-Account-Key: account4
+X-UIDL: GmailId14625b19ac69bf2a
+X-Mozilla-Status: 0001
+X-Mozilla-Status2: 00000000
+X-Mozilla-Keys:                                                                                 
+Delivered-To: pochu27@gmail.com
+Received: by 10.60.170.229 with SMTP id ap5csp204557oec;
+        Thu, 22 May 2014 13:48:55 -0700 (PDT)
+X-Received: by 10.66.121.197 with SMTP id lm5mr241537pab.118.1400791735070;
+        Thu, 22 May 2014 13:48:55 -0700 (PDT)
+Return-Path: <wayland-devel-bounces@lists.freedesktop.org>
+Received: from gabe.freedesktop.org (gabe.freedesktop.org. [131.252.210.177])
+        by mx.google.com with ESMTP id db3si1084263pbb.85.2014.05.22.13.48.54
+        for <multiple recipients>;
+        Thu, 22 May 2014 13:48:55 -0700 (PDT)
+Received-SPF: none (google.com: wayland-devel-bounces@lists.freedesktop.org does not designate permitted sender hosts) client-ip=131.252.210.177;
+Authentication-Results: mx.google.com;
+       spf=neutral (google.com: wayland-devel-bounces@lists.freedesktop.org does not designate permitted sender hosts) smtp.mail=wayland-devel-bounces@lists.freedesktop.org;
+       dkim=neutral (body hash did not verify) header.i=@
+Received: from gabe.freedesktop.org (localhost [127.0.0.1])
+	by gabe.freedesktop.org (Postfix) with ESMTP id 316386ECFF;
+	Thu, 22 May 2014 13:48:51 -0700 (PDT)
+X-Original-To: wayland-devel@lists.freedesktop.org
+Delivered-To: wayland-devel@lists.freedesktop.org
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com
+ [66.111.4.27])
+ by gabe.freedesktop.org (Postfix) with ESMTP id 2BA236E4A3
+ for <wayland-devel@lists.freedesktop.org>;
+ Thu, 22 May 2014 13:48:49 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.mail.srv.osa [10.202.2.42])
+ by gateway1.nyi.mail.srv.osa (Postfix) with ESMTP id 64F902146D;
+ Thu, 22 May 2014 16:41:48 -0400 (EDT)
+Received: from frontend2 ([10.202.2.161])
+ by compute2.internal (MEProxy); Thu, 22 May 2014 16:41:48 -0400
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; d=
+ messagingengine.com; h=from:to:cc:subject:date:message-id
+ :in-reply-to:references; s=smtpout; bh=xZJ7s9hNabCm1ID+8F4d8krGs
+ TY=; b=drH3dbtPBvoT4yYkFzVo4TiQuEuQBc8bydv20xxsLDlg0fkFtMaz269TV
+ xsaAMu6uGPwCKup2xwOtKVUFtPwv/hqoLrgqmQ+Qas6qSVl/LMma5fOzN+BDbzjX
+ v00ES7HaFZ+nsM1X4ZUPf9Ls9daw3aYqtULp7QbZ657x7QeVQY=
+X-Sasl-enc: B8P/k2jTwz7A//gn0Vb9pYsonoiwfFBl9LPBBjIF7NSy 1400791307
+Received: from localhost.localdomain (unknown [151.27.142.237])
+ by mail.messagingengine.com (Postfix) with ESMTPA id B00B1680118;
+ Thu, 22 May 2014 16:41:47 -0400 (EDT)
+From: Jonny Lamb <jonny.lamb@collabora.co.uk>
+To: wayland-devel@lists.freedesktop.org
+Subject: [PATCH weston 1/5] animation: fix move scale animation
+Date: Thu, 22 May 2014 22:41:30 +0200
+Message-Id: <1400791294-31869-2-git-send-email-jonny.lamb@collabora.co.uk>
+X-Mailer: git-send-email 2.0.0.rc2
+In-Reply-To: <1400791294-31869-1-git-send-email-jonny.lamb@collabora.co.uk>
+References: <1400791294-31869-1-git-send-email-jonny.lamb@collabora.co.uk>
+Cc: Jonny Lamb <jonny.lamb@collabora.co.uk>
+X-BeenThere: wayland-devel@lists.freedesktop.org
+X-Mailman-Version: 2.1.15
+Precedence: list
+List-Id: Discussion about the wayland display server
+ <wayland-devel.lists.freedesktop.org>
+List-Unsubscribe: <http://lists.freedesktop.org/mailman/options/wayland-devel>, 
+ <mailto:wayland-devel-request@lists.freedesktop.org?subject=unsubscribe>
+List-Archive: <http://lists.freedesktop.org/archives/wayland-devel>
+List-Post: <mailto:wayland-devel@lists.freedesktop.org>
+List-Help: <mailto:wayland-devel-request@lists.freedesktop.org?subject=help>
+List-Subscribe: <http://lists.freedesktop.org/mailman/listinfo/wayland-devel>, 
+ <mailto:wayland-devel-request@lists.freedesktop.org?subject=subscribe>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+Errors-To: wayland-devel-bounces@lists.freedesktop.org
+Sender: "wayland-devel" <wayland-devel-bounces@lists.freedesktop.org>
+
+Both weston_move_scale_run() and weston_slide_run() were broken in
+commit 3a869019. Commit a4a6f161 fixed and explained the problem for
+weston_slide_run() but weston_move_scale_run() remained broken.
+
+To fix weston_move_scale_run(), weston_view_animation_run() is also
+required. It was removed when _run() was split into two functions
+_create() and _run() in commit f5cc2b56, but _run() was not added in
+this commit.
+---
+ src/animation.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/src/animation.c b/src/animation.c
+index a29b34a..392e32d 100644
+--- a/src/animation.c
++++ b/src/animation.c
+@@ -458,8 +458,10 @@ weston_move_scale_run(struct weston_view *view, int dx, int dy,
+ 	if (animation == NULL)
+ 		return NULL;
+ 
+-	weston_spring_init(&animation->spring, 400.0, start, end);
++	weston_spring_init(&animation->spring, 400.0, 0.0, 1.0);
+ 	animation->spring.friction = 1150;
+ 
++	weston_view_animation_run(animation);
++
+ 	return animation;
+ }
+-- 
+2.0.0.rc2
+
+_______________________________________________
+wayland-devel mailing list
+wayland-devel@lists.freedesktop.org
+http://lists.freedesktop.org/mailman/listinfo/wayland-devel
+

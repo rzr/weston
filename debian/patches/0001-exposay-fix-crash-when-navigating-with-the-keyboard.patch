@@ -1,0 +1,34 @@
+From e608cd67218fdaa0405df306f84883ed114f86db Mon Sep 17 00:00:00 2001
+From: Emilio Pozuelo Monfort <emilio.pozuelo@collabora.co.uk>
+Date: Sat, 24 May 2014 02:38:56 +0200
+Subject: [PATCH weston] exposay: fix crash when navigating with the keyboard
+
+Commit a7592019 introduced an optimization that caused some
+exposay struct members to not be properly initialized, particularly
+cur_output, leading to crashes in some circumstances (e.g. pressing
+the down arrow key after going to exposay).
+
+Signed-off-by: Emilio Pozuelo Monfort <emilio.pozuelo@collabora.co.uk>
+---
+ desktop-shell/exposay.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/desktop-shell/exposay.c b/desktop-shell/exposay.c
+index 1d8b40e..104b9d9 100644
+--- a/desktop-shell/exposay.c
++++ b/desktop-shell/exposay.c
+@@ -323,8 +323,10 @@ exposay_layout(struct desktop_shell *shell, struct shell_output *shell_output)
+ 		i++;
+ 	}
+ 
+-	if (highlight)
++	if (highlight) {
++		shell->exposay.focus_current = NULL;
+ 		exposay_highlight_surface(shell, highlight);
++	}
+ 
+ 	weston_compositor_schedule_repaint(shell->compositor);
+ 
+-- 
+2.0.0.rc2
+
