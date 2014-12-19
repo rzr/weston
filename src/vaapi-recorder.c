@@ -919,7 +919,15 @@ vpp_destroy(struct vaapi_recorder *r)
 static int
 setup_worker_thread(struct vaapi_recorder *r)
 {
-	pthread_mutex_init(&r->mutex, NULL);
+
+pthread_mutex_t Mutex;
+pthread_mutexattr_t Attr;
+
+pthread_mutexattr_init(&Attr);
+pthread_mutexattr_settype(&Attr, PTHREAD_MUTEX_RECURSIVE);
+pthread_mutex_init(&r->mutex, &Attr);
+
+
 	pthread_cond_init(&r->input_cond, NULL);
 	pthread_create(&r->worker_thread, NULL, worker_thread_function, r);
 
